@@ -36,7 +36,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   const Icon(Icons.lock, size: 100,),
                   //Welcome back
                   const SizedBox(height: 50),
-                  Text('Welcome back you\'ve been missed!',style: TextStyle(fontSize: 16,),
+                  Text('Welcome to Grab and Go Register Now!',style: TextStyle(fontSize: 16,),
                   ),
                   const SizedBox(height: 30),
                   //username textfield
