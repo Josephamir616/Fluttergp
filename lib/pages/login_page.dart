@@ -112,12 +112,6 @@ class _LoginPageState extends State<LoginPage> {
                         color: Colors.grey[400],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Text('Or continue with',
-                        style: TextStyle(color: Colors.grey.shade700),
-                        ),
-                      ),
                       Expanded(
                         child: Divider(
                           thickness: 0.5,
