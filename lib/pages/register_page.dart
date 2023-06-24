@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/components/my_button.dart';
+import 'package:untitled/components/my_button2.dart';
 import 'package:untitled/components/my_textfield.dart';
 import 'package:untitled/components/square_tile.dart';
 
@@ -14,7 +15,7 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   // text editing controllers
   final usernameController = TextEditingController();
-
+  final phonenumbercontroller = TextEditingController();
   final passwordController = TextEditingController();
 
   // sign user in method
@@ -47,33 +48,22 @@ class _RegisterPageState extends State<RegisterPage> {
                   const SizedBox(height: 15),
                   //password textfield
                   MyTextField(
-                    controller: passwordController,
-                    hintText: 'Password',
-                    obscureText: true,
+                    controller: phonenumbercontroller,
+                    hintText: 'Mobile Number',
+                    obscureText: false,
                   ),
                   const SizedBox(height : 10),
                   //Confirm password
                   MyTextField(
                     controller: passwordController,
-                    hintText: 'Confirm Password',
+                    hintText: 'Password',
                     obscureText: true,
                   ),
                   const SizedBox(height : 10),
                   //forgot password?
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text('Forgot Password?',
-                          style: TextStyle(color: Colors.grey.shade600),
-                        ),
-                      ],
-                    ),
-                  ),
                   const SizedBox(height: 25),
                   //sign in button
-                  MyButton(
+                  MyButton2(
                     onTap: signUserup,
                   ),
                   const SizedBox(height: 30),
@@ -105,16 +95,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   const SizedBox(height: 25),
                   //google + apple sign in buttons
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      //google Button
-                      SquareTile(imagePath: 'lib/Images/google.png' ,),
-                      SizedBox(width: 25),
-                      //Apple Buttton
-                      SquareTile(imagePath: 'lib/Images/apple.jpg' ,),
-                    ],
-                  ),
                   const SizedBox(height: 20),
                   //not a member? register now
                   Row(
