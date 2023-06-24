@@ -22,7 +22,7 @@ void togglePages(){
   @override
   Widget build(BuildContext context){
   if (showLoginPage) {
-    return LoginPage(onTap: togglePages,
+    return LoginPage(onTap: (togglePages),
     );
   } else {
     return RegisterPage(

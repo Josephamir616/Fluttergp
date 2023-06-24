@@ -3,6 +3,9 @@ import 'package:untitled/components/my_button.dart';
 import 'package:untitled/components/my_button2.dart';
 import 'package:untitled/components/my_textfield.dart';
 import 'package:untitled/components/square_tile.dart';
+import 'package:untitled/pages/LoginOrRegister.dart';
+import 'package:dio/dio.dart';
+import 'package:untitled/pages/login_page.dart';
 
 class RegisterPage extends StatefulWidget {
   final Function()? onTap;
@@ -19,7 +22,30 @@ class _RegisterPageState extends State<RegisterPage> {
   final passwordController = TextEditingController();
 
   // sign user in method
-  void signUserup(){}
+  Dio dio = Dio();
+  // sign user in method
+  Future<void> sendPostRequest() async {
+    try {
+      var response = await dio.post(
+        'http://127.0.0.1:5000/register',
+        data: {
+          "username":usernameController.text,
+          "password":passwordController.text,
+          "number":phonenumbercontroller.text
+        },
+      );
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LoginPage(onTap:(){})),
+      );
+      // Process the response
+      print(response.data);
+    } catch (e) {
+      // Handle any errors
+      print('Error: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context){
@@ -64,7 +90,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   const SizedBox(height: 25),
                   //sign in button
                   MyButton2(
-                    onTap: signUserup,
+                    onTap: sendPostRequest,
                   ),
                   const SizedBox(height: 30),
                   //or continue with
@@ -76,12 +102,6 @@ class _RegisterPageState extends State<RegisterPage> {
                           child: Divider(
                             thickness: 0.5,
                             color: Colors.grey[400],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Text('Or continue with',
-                            style: TextStyle(color: Colors.grey.shade700),
                           ),
                         ),
                         Expanded(
