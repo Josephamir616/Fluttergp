@@ -27,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> sendPostRequest() async {
     try {
       var response = await dio.post(
-        'http://127.0.0.1:5000/login',
+        'http://10.0.2.2:5000/login',
         data: {
           "username":usernameController.text,
           "password":passwordController.text,

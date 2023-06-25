@@ -27,7 +27,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Future<void> sendPostRequest() async {
     try {
       var response = await dio.post(
-        'http://127.0.0.1:5000/register',
+        'http://10.0.2.2:5000/register',
         data: {
           "username":usernameController.text,
           "password":passwordController.text,
