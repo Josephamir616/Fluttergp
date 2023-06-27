@@ -4,7 +4,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:dio/dio.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:untitled/model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -14,9 +16,50 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
   bool is500 = false;
+
+  List<Product> products = [];
+
+  String name = "";
+  String price = "";
+  int total_price = 0;
+  String? username;
+
+
+  Future<String?> getTokenFromSharedPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = await prefs.getString('token');
+    return token;
+  }
+
+  void decodeToken() async {
+    // Retrieve the token from SharedPreferences
+    String? token = await getTokenFromSharedPreferences();
+
+    if (token != null) {
+      // Decode the token
+      Map<String, dynamic>? decodedToken = Jwt.parseJwt(token);
+
+      // Access the token claims
+      setState(() {
+        username = decodedToken?['username'];
+      });
+      // Use the decoded token claims as needed
+      print('Username: $username');
+    } else {
+      // Token not found in SharedPreferences
+      print('Token not found');
+    }
+  }
+
+
+  @override
+  void initState() {
+    setState(() {
+      decodeToken();
+    });
+  }
 
   Future<Map<String, dynamic>> uploadImage(File image) async {
     is500 = false;
@@ -43,11 +86,6 @@ class HomePageState extends State<HomePage> {
 
     return {};
   }
-
-  List<Product> products = [];
-
-  String name = "";
-  String price = "";
 
   void openCamera() async {
     final imagePicker = ImagePicker();
@@ -115,6 +153,7 @@ class HomePageState extends State<HomePage> {
                 Product product = Product(name: name, price: price);
                 setState(() {
                   products.add(product);
+                  total_price += int.parse(product.price);
                 });
                 Navigator.of(context).pop();
               }, child: Text("Yes")),
@@ -143,7 +182,7 @@ class HomePageState extends State<HomePage> {
         backgroundColor: Colors.grey,
         title: const Text('Grab and Go'),
       ),
-      body:  ListView.builder(
+      body: products.length > 0 ? ListView.builder(
         itemCount: products.length,
         itemBuilder: (context, index) {
           final product = products[index];
@@ -167,6 +206,8 @@ class HomePageState extends State<HomePage> {
             ),
           );
         },
+      ):Center(
+        child: Text("Hello $username, start shopping now!"),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
