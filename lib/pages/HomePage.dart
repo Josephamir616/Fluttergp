@@ -1,7 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:dio/dio.dart';
+import 'package:untitled/model.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -41,6 +44,8 @@ class HomePageState extends State<HomePage> {
     return {};
   }
 
+  List<Product> products = [];
+
   String name = "";
   String price = "";
 
@@ -54,7 +59,7 @@ class HomePageState extends State<HomePage> {
       if (!is500) {
         name = responseData['name'];
         price = responseData['price'].toString();
-      }      // ignore: use_build_context_synchronously
+      }
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -62,12 +67,24 @@ class HomePageState extends State<HomePage> {
             title: Text(is500 ? "Product can not be detected, try to capture another photo." :'$name $price L.E') ,
             content: Image.file(File(pickedImage.path)),
             actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('Close'),
-              ),
+              if (!is500) Text("Add to cart?"),
+              if (!is500) TextButton(onPressed: () {
+                Product product = Product(name: name, price: price);
+                setState(() {
+                  products.add(product);
+                });
+                Navigator.of(context).pop();
+              }, child: Text("Yes")),
+              if (!is500) TextButton(onPressed: () {
+                Navigator.of(context).pop();
+              }, child: Text("No")),
+              if (is500)
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Close'),
+                ),
             ],
           );
         },
@@ -82,12 +99,10 @@ class HomePageState extends State<HomePage> {
     if (pickedImage != null) {
       File imageFile = File(pickedImage.path);
       Map<String, dynamic> responseData = await uploadImage(imageFile);
-      print(responseData['name']);
       if (!is500) {
         name = responseData['name'];
         price = responseData['price'].toString();
       }
-      // ignore: use_build_context_synchronously
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -95,12 +110,24 @@ class HomePageState extends State<HomePage> {
             title: Text(is500 ? "Product can not be detected, try to capture another photo." :'$name $price L.E'),
             content: Image.file(File(pickedImage.path)),
             actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Close'),
-              ),
+              if (!is500) Text("Add to cart?"),
+              if (!is500) TextButton(onPressed: () {
+                Product product = Product(name: name, price: price);
+                setState(() {
+                  products.add(product);
+                });
+                Navigator.of(context).pop();
+              }, child: Text("Yes")),
+              if (!is500) TextButton(onPressed: () {
+                Navigator.of(context).pop();
+              }, child: Text("No")),
+              if (is500)
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Close'),
+                ),
             ],
           );
         },
@@ -116,8 +143,30 @@ class HomePageState extends State<HomePage> {
         backgroundColor: Colors.grey,
         title: const Text('Grab and Go'),
       ),
-      body: const Center(
-        child: Text("Start Shopping Now!"),
+      body:  ListView.builder(
+        itemCount: products.length,
+        itemBuilder: (context, index) {
+          final product = products[index];
+          return Material(
+            elevation: 15.0,
+            shadowColor: Colors.blueGrey,
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child:  ListTile(
+                title: Text(product.name),
+                subtitle: Text('Price: ${product.price}'),
+                trailing: IconButton(
+                  icon: Icon(Icons.remove_circle),
+                  onPressed: () {
+                    setState(() {
+                      products.removeAt(index);
+                    });
+                  },
+                ),
+              ),
+            ),
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -153,5 +202,4 @@ class HomePageState extends State<HomePage> {
       ),
     );
   }
-
 }
