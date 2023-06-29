@@ -50,16 +50,13 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context){
     return Scaffold(
-        backgroundColor: Colors.grey[300],
         body: SafeArea(
           child: Center(
             child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 15),
-                  //logo
-                  const Icon(Icons.lock, size: 100,),
+                  Image.asset('lib/Images/grabngo.jpg',height: 100,),
                   //Welcome back
                   const SizedBox(height: 50),
                   Text('Welcome to Grab and Go Register Now!',style: TextStyle(fontSize: 16,),
@@ -78,21 +75,17 @@ class _RegisterPageState extends State<RegisterPage> {
                     hintText: 'Mobile Number',
                     obscureText: false,
                   ),
-                  const SizedBox(height : 10),
+                  const SizedBox(height : 15),
                   //Confirm password
                   MyTextField(
                     controller: passwordController,
                     hintText: 'Password',
                     obscureText: true,
                   ),
-                  const SizedBox(height : 10),
-                  //forgot password?
-                  const SizedBox(height: 25),
-                  //sign in button
+                  SizedBox(height: 10,),
                   MyButton2(
                     onTap: sendPostRequest,
                   ),
-                  const SizedBox(height: 30),
                   //or continue with
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -113,10 +106,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 25),
-                  //google + apple sign in buttons
-                  const SizedBox(height: 20),
-                  //not a member? register now
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

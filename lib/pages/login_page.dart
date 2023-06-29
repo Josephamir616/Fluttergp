@@ -54,16 +54,14 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      backgroundColor: Colors.grey[300],
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 15),
                 //logo
-                const Icon(Icons.lock, size: 100,),
+                Image.asset('lib/Images/grabngo.jpg',height: 100,),
                 //Welcome back
                 const SizedBox(height: 50),
                 Text('Welcome back you\'ve been missed!',style: TextStyle(fontSize: 16,),
@@ -121,11 +119,6 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 25),
-                //google + apple sign in buttons
-
-                const SizedBox(height: 20),
-                //not a member? register now
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

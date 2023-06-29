@@ -22,14 +22,14 @@ class HomePageState extends State<HomePage> {
 
   List<Product> products = [];
   String name = "";
-  String price = "";
+  int price = 0;
   int total_price = 0;
   String? username;
 
   Future<void> nextpage() async {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => PaymentPage()),
+      MaterialPageRoute(builder: (context) => PaymentPage(total_price: total_price,)),
     );
   }
   Future<String?> getTokenFromSharedPreferences() async {
@@ -101,7 +101,7 @@ class HomePageState extends State<HomePage> {
       Map<String, dynamic> responseData = await uploadImage(image);
       if (!is500) {
         name = responseData['name'];
-        price = responseData['price'].toString();
+        price = responseData['price'];
       }
       showDialog(
         context: context,
@@ -112,10 +112,10 @@ class HomePageState extends State<HomePage> {
             actions: [
               if (!is500) Text("Add to cart?"),
               if (!is500) TextButton(onPressed: () {
-                Product product = Product(name: name, price: price);
+                Product product = Product(name: name, price: price,quantity: 1);
                 setState(() {
                   products.add(product);
-                  total_price += int.parse(product.price);
+                  total_price += product.price;
                 });
                 Navigator.of(context).pop();
               }, child: Text("Yes")),
@@ -145,7 +145,7 @@ class HomePageState extends State<HomePage> {
       Map<String, dynamic> responseData = await uploadImage(imageFile);
       if (!is500) {
         name = responseData['name'];
-        price = responseData['price'].toString();
+        price = responseData['price'];
       }
       showDialog(
         context: context,
@@ -156,10 +156,10 @@ class HomePageState extends State<HomePage> {
             actions: [
               if (!is500) Text("Add to cart?"),
               if (!is500) TextButton(onPressed: () {
-                Product product = Product(name: name, price: price);
+                Product product = Product(name: name, price: price,quantity: 1);
                 setState(() {
                   products.add(product);
-                  total_price += int.parse(product.price);
+                  total_price += product.price;
                 });
                 Navigator.of(context).pop();
               }, child: Text("Yes")),
@@ -197,55 +197,80 @@ class HomePageState extends State<HomePage> {
             shadowColor: Colors.blueGrey,
             child: Padding(
               padding: const EdgeInsets.all(10),
-              child:  ListTile(
+              child: ListTile(
                 title: Text(product.name),
-                subtitle: Text('Price: ${product.price}'),
-                trailing: IconButton(
-                  icon: Icon(Icons.remove_circle),
-                  onPressed: () {
-                    setState(() {
-                      products.removeAt(index);
-                    });
-                  },
+                subtitle: Text('Price: ${product.total_price} Quantity: ${product.quantity}'),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.remove),
+                      onPressed: () {
+                        setState(() {
+                          total_price -= products[index].price;
+                          products[index].quantity -= 1;
+                          if (products[index].quantity==0) {
+                            products.removeAt(index);
+                          }
+                        });
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.add),
+                      onPressed: () {
+                        setState(() {
+                          total_price += products[index].price;
+                          products[index].quantity += 1;
+                        });
+                      },
+                    ),
+                  ],
                 ),
               ),
             ),
           );
         },
       ):Center(
-        child: Text("Hello $username, start shopping now!"),
+        child: Text("Hello $username, start shopping now!",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
       ),
       bottomNavigationBar: Visibility(
         visible: products.isNotEmpty,
         child: Container(
           padding: const EdgeInsets.all(5),
           margin: const EdgeInsets.symmetric(horizontal: 5),
-          child: Row(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(
-                width: 140,
-                child: ElevatedButton(style: ElevatedButton.styleFrom(
-                  primary: Colors.red,
-                ),
-                  child: new Text("Remove all products"),
-                  onPressed: (){
-                  setState(() {
-                    products.clear();
-                  });
-                  },
-                ),
-              ),
-              const SizedBox(width: 5),
-              SizedBox(
-                width: 140,
-                child: ElevatedButton(style: ElevatedButton.styleFrom(
-                  primary: Colors.green,
-                ),
-                  child: new Text("Proceed to Checkout"),
-                  onPressed: (){
-                  nextpage();
-                  },
-                ),
+              Text("Total price: $total_price",style: TextStyle(fontWeight: FontWeight.bold),),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 185,
+                    child: ElevatedButton(style: ElevatedButton.styleFrom(
+                      primary: Colors.red,
+                    ),
+                      child: new Text("Delete Cart"),
+                      onPressed: (){
+                      setState(() {
+                        products.clear();
+                        total_price = 0;
+                      });
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 15),
+                  SizedBox(
+                    width: 185,
+                    child: ElevatedButton(style: ElevatedButton.styleFrom(
+                      primary: Colors.green,
+                    ),
+                      child: new Text("Proceed to Checkout"),
+                      onPressed: (){
+                      nextpage();
+                      },
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
