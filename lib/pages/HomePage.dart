@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:untitled/model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/pages/creditcardinfo.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -20,13 +21,17 @@ class HomePageState extends State<HomePage> {
   bool is500 = false;
 
   List<Product> products = [];
-
   String name = "";
   String price = "";
   int total_price = 0;
   String? username;
 
-
+  Future<void> nextpage() async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => PaymentPage()),
+    );
+  }
   Future<String?> getTokenFromSharedPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = await prefs.getString('token');
@@ -110,6 +115,7 @@ class HomePageState extends State<HomePage> {
                 Product product = Product(name: name, price: price);
                 setState(() {
                   products.add(product);
+                  total_price += int.parse(product.price);
                 });
                 Navigator.of(context).pop();
               }, child: Text("Yes")),
@@ -208,6 +214,42 @@ class HomePageState extends State<HomePage> {
         },
       ):Center(
         child: Text("Hello $username, start shopping now!"),
+      ),
+      bottomNavigationBar: Visibility(
+        visible: products.isNotEmpty,
+        child: Container(
+          padding: const EdgeInsets.all(5),
+          margin: const EdgeInsets.symmetric(horizontal: 5),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 140,
+                child: ElevatedButton(style: ElevatedButton.styleFrom(
+                  primary: Colors.red,
+                ),
+                  child: new Text("Remove all products"),
+                  onPressed: (){
+                  setState(() {
+                    products.clear();
+                  });
+                  },
+                ),
+              ),
+              const SizedBox(width: 5),
+              SizedBox(
+                width: 140,
+                child: ElevatedButton(style: ElevatedButton.styleFrom(
+                  primary: Colors.green,
+                ),
+                  child: new Text("Proceed to Checkout"),
+                  onPressed: (){
+                  nextpage();
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
