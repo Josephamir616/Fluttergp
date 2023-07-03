@@ -16,6 +16,20 @@ class _PaymentPageState extends State<PaymentPage> {
   TextEditingController _cardNumberController = TextEditingController();
   TextEditingController _cvvController = TextEditingController();
 
+  void press() async {
+    showDialog(context: context,
+        builder: (BuildContext context){
+          return AlertDialog(
+            title: const Text('Transaction Successful!!'),
+            content: const Icon(
+              Icons.check_circle,
+              color: Colors.green,
+              size: 40,
+            ),
+          );
+        }
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,12 +116,15 @@ class _PaymentPageState extends State<PaymentPage> {
                           color: Colors.lightGreen,
                           borderRadius: BorderRadius.circular(12)
                       ),
-                      child: const Center(
-                        child: Text("Pay!",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                      child: GestureDetector(
+                        onTap: press,
+                        child: const Center(
+                          child: Text("Pay!",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
                           ),
                         ),
                       ),

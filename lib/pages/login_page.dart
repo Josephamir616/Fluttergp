@@ -25,6 +25,14 @@ class _LoginPageState extends State<LoginPage> {
   Dio dio = Dio();
   // sign user in method
   Future<void> sendPostRequest() async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const Center (
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
     try {
       var response = await dio.post(
         'http://10.0.2.2:5000/login',
@@ -33,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
           "password":passwordController.text,
         },
       );
-
+      Navigator.pop(context);
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => HomePage()),
@@ -49,6 +57,7 @@ class _LoginPageState extends State<LoginPage> {
       // Handle any errors
       print('Error: $e');
     }
+
   }
 
   @override

@@ -95,7 +95,14 @@ class HomePageState extends State<HomePage> {
   void openCamera() async {
     final imagePicker = ImagePicker();
     final pickedImage = await imagePicker.pickImage(source: ImageSource.camera);
-
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const Center (
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
     if (pickedImage != null) {
       File image = File(pickedImage.path);
       Map<String, dynamic> responseData = await uploadImage(image);
@@ -103,6 +110,7 @@ class HomePageState extends State<HomePage> {
         name = responseData['name'];
         price = responseData['price'];
       }
+      Navigator.pop(context);
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -139,7 +147,14 @@ class HomePageState extends State<HomePage> {
   void pickFromGallery() async {
     final imagePicker = ImagePicker();
     final pickedImage = await imagePicker.pickImage(source: ImageSource.gallery);
-
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const Center (
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
     if (pickedImage != null) {
       File imageFile = File(pickedImage.path);
       Map<String, dynamic> responseData = await uploadImage(imageFile);
@@ -147,6 +162,7 @@ class HomePageState extends State<HomePage> {
         name = responseData['name'];
         price = responseData['price'];
       }
+      Navigator.pop(context);
       showDialog(
         context: context,
         builder: (BuildContext context) {

@@ -25,6 +25,14 @@ class _RegisterPageState extends State<RegisterPage> {
   Dio dio = Dio();
   // sign user in method
   Future<void> sendPostRequest() async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const Center (
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
     try {
       var response = await dio.post(
         'http://10.0.2.2:5000/register',
@@ -34,7 +42,7 @@ class _RegisterPageState extends State<RegisterPage> {
           "number":phonenumbercontroller.text
         },
       );
-
+      Navigator.pop(context);
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => LoginPage(onTap:(){})),
