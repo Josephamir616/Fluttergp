@@ -17,22 +17,31 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   // text editing controllers
   final usernameController = TextEditingController();
-
   final passwordController = TextEditingController();
+
+  bool passwordEmpty = false;
+  bool usernameEmpty = false;
 
   // sign user in method
   // sign user in method
   Dio dio = Dio();
   // sign user in method
   Future<void> sendPostRequest() async {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const Center (
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
+
+    setState(() {
+      usernameEmpty = usernameController.text.isEmpty;
+      passwordEmpty = passwordController.text.isEmpty;
+    });
+    if (!usernameEmpty && !passwordEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return const Center (
+            child: CircularProgressIndicator(),
+          );
+        },
+      );
+    }
     try {
       var response = await dio.post(
         'http://10.0.2.2:5000/login',
@@ -54,7 +63,9 @@ class _LoginPageState extends State<LoginPage> {
 
 
     } catch (e) {
-      // Handle any errors
+      if (!usernameEmpty && !passwordEmpty) {
+        Navigator.pop(context);
+      }
       print('Error: $e');
     }
 
@@ -63,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      body: SafeArea(
+        body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
             child: Column(
@@ -81,6 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                   controller: usernameController,
                   hintText: 'Username',
                   obscureText: false,
+                  errorText: usernameEmpty ? 'Please enter your username' : null,
                 ),
                 const SizedBox(height: 15),
                 //password textfield
@@ -88,6 +100,7 @@ class _LoginPageState extends State<LoginPage> {
                   controller: passwordController,
                   hintText: 'Password',
                   obscureText: true,
+                  errorText: passwordEmpty ? 'Please enter your password' : null,
                 ),
                 const SizedBox(height : 10),
                 //forgot password?

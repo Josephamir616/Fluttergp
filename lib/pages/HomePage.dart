@@ -8,6 +8,7 @@ import 'package:jwt_decode/jwt_decode.dart';
 import 'package:untitled/model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/pages/creditcardinfo.dart';
+import 'package:untitled/pages/login_page.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -202,45 +203,50 @@ class HomePageState extends State<HomePage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.grey,
+        centerTitle: true,
         title: const Text('Grab and Go'),
       ),
       body: products.length > 0 ? ListView.builder(
         itemCount: products.length,
         itemBuilder: (context, index) {
           final product = products[index];
-          return Material(
-            elevation: 15.0,
-            shadowColor: Colors.blueGrey,
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: ListTile(
-                title: Text(product.name),
-                subtitle: Text('Price: ${product.total_price} Quantity: ${product.quantity}'),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.remove),
-                      onPressed: () {
-                        setState(() {
-                          total_price -= products[index].price;
-                          products[index].quantity -= 1;
-                          if (products[index].quantity==0) {
-                            products.removeAt(index);
-                          }
-                        });
-                      },
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.add),
-                      onPressed: () {
-                        setState(() {
-                          total_price += products[index].price;
-                          products[index].quantity += 1;
-                        });
-                      },
-                    ),
-                  ],
+          return Padding(
+            padding:EdgeInsets.only(top: 10,left: 10,right: 10),
+            child: Material(
+              elevation: 5.0,
+              borderRadius: BorderRadius.circular(20),
+              shadowColor: Colors.blueGrey,
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: ListTile(
+                  title: Text(product.name,style: TextStyle(fontWeight: FontWeight.bold),),
+                  subtitle: Text('Price: ${product.total_price} Quantity: ${product.quantity}'),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.remove),
+                        onPressed: () {
+                          setState(() {
+                            total_price -= products[index].price;
+                            products[index].quantity -= 1;
+                            if (products[index].quantity==0) {
+                              products.removeAt(index);
+                            }
+                          });
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.add),
+                        onPressed: () {
+                          setState(() {
+                            total_price += products[index].price;
+                            products[index].quantity += 1;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -294,6 +300,8 @@ class HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          openCamera();
+          /*
           showModalBottomSheet(
             context: context,
             builder: (BuildContext context) {
@@ -319,9 +327,9 @@ class HomePageState extends State<HomePage> {
                 ],
               );
             },
-          );
+          );*/
         },
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.camera_alt_outlined),
         backgroundColor: Colors.black,
       ),
     );

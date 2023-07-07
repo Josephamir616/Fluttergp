@@ -21,18 +21,31 @@ class _RegisterPageState extends State<RegisterPage> {
   final phonenumbercontroller = TextEditingController();
   final passwordController = TextEditingController();
 
+  bool usernameEmpty = false;
+  bool passwordEmpty = false;
+  bool numberEmpty = false;
+
   // sign user in method
   Dio dio = Dio();
   // sign user in method
   Future<void> sendPostRequest() async {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const Center (
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
+
+    setState(() {
+      usernameEmpty = usernameController.text.isEmpty;
+      passwordEmpty = passwordController.text.isEmpty;
+      numberEmpty = phonenumbercontroller.text.isEmpty;
+    });
+
+    if (!usernameEmpty && !passwordEmpty && !numberEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return const Center (
+            child: CircularProgressIndicator(),
+          );
+        },
+      );
+    }
     try {
       var response = await dio.post(
         'http://10.0.2.2:5000/register',
@@ -51,6 +64,9 @@ class _RegisterPageState extends State<RegisterPage> {
       print(response.data);
     } catch (e) {
       // Handle any errors
+      if (!usernameEmpty && !passwordEmpty && !numberEmpty) {
+        Navigator.pop(context);
+      }
       print('Error: $e');
     }
   }
@@ -75,10 +91,12 @@ class _RegisterPageState extends State<RegisterPage> {
                     controller: usernameController,
                     hintText: 'Username',
                     obscureText: false,
+                    errorText: usernameEmpty ? 'Please enter a username':null
                   ),
                   const SizedBox(height: 15),
                   //password textfield
                   MyTextField(
+                    errorText: numberEmpty ? 'Please enter a phone number' : null,
                     controller: phonenumbercontroller,
                     hintText: 'Mobile Number',
                     obscureText: false,
@@ -86,6 +104,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   const SizedBox(height : 15),
                   //Confirm password
                   MyTextField(
+                    errorText: passwordEmpty ? 'Please enter a password': null,
                     controller: passwordController,
                     hintText: 'Password',
                     obscureText: true,
