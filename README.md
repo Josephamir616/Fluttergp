@@ -1,5 +1,5 @@
-Grab and Go
-
+# Grab and Go
+ 
 A mobile application that is used in supermarkets for users to shop through.
 
 Users could capture a photo of the product and add it into the cart and checkout through the app.
