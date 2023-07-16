@@ -1,16 +1,11 @@
-# untitled
+Grab and Go
 
-A new Flutter project.
+A mobile application that is used in supermarkets for users to shop through.
 
-## Getting Started
+Users could capture a photo of the product and add it into the cart and checkout through the app.
 
-This project is a starting point for a Flutter application.
+Technologies used: Flutter, Flask, and Firestore.
 
-A few resources to get you started if this is your first Flutter project:
+You can find a video of the demo through this link: https://lnkd.in/gxUwqdk5
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Backend repo: https://github.com/JanGeorge06/Grab-And-Go-Intelligent-Shopping
